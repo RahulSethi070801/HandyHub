@@ -19,4 +19,6 @@ public class AppMapper {
     public List<Object> getAllPersons(){
         return jdbcTemplate.query("SELECT FirstName FROM Users", (rs, rowNum) -> rs.getString("FirstName"));
         }
+
+
 }
