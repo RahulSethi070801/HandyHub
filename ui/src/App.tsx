@@ -43,7 +43,6 @@ function App() {
           </aside>
           
           <div className="flex-1">
-            <SearchFilters />
             <div className="mt-6">
               {SAMPLE_DATA.map((provider, index) => (
                 <ServiceCard key={index} {...provider} />
