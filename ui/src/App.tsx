@@ -1,37 +1,45 @@
-import React from 'react';
+import React, {useState, useEffect } from 'react';
 import Header from './components/Header';
 import Filters from './components/Filters';
 import ServiceCard from './components/ServiceCard';
 import SearchFilters from './components/SearchFilters';
 
-const SAMPLE_DATA = [
-  {
-    name: 'JOHN WELL',
-    service: 'Intense bathroom cleaning',
-    rating: 4.78,
-    reviews: 1.7,
-    price: 20,
-    description: [
-      'Hard water stains & dirt in tile grouting removal with scrubbing machine',
-      'Intense cleaning of toilet pot, tiles, floor, basin, exhaust, etc'
-    ],
-    image: 'https://images.unsplash.com/photo-1600486913747-55e5470d6f40?auto=format&fit=crop&q=80&w=300&h=300'
-  },
-  {
-    name: 'MIKE SMITH',
-    service: 'Professional plumbing service',
-    rating: 4.92,
-    reviews: 2.1,
-    price: 35,
-    description: [
-      'Expert in fixing leaks, clogs, and pipe installations',
-      'Emergency plumbing services available 24/7'
-    ],
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=300&h=300'
-  }
-];
+interface ServiceProvider {
+  handyPersonId: number;
+  firstName: string;
+  lastName: string;
+  contactNumber: string;
+  city: string;
+  state: string;
+  averageRating: number;
+}
+
 
 function App() {
+
+  const [serviceProviders, setServiceProviders] = useState<ServiceProvider[]>([]);
+  const [rating, setRating] = useState<number | null>(null);
+
+  useEffect(() => {
+    let url = 'http://localhost:8080/getAllHandyPersons';
+    if (rating !== null) {
+      url += `/${rating}`;
+    }
+
+    console.log(`Fetching data from: ${url}`);
+  
+    fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {console.log('Fetched data:', data);
+      setServiceProviders(data)})
+      .catch(error => console.error('Error fetching service providers:', error));
+  }, [rating]);
+
   return (
     <div className="min-h-screen bg-gray-100">
       <Header />
@@ -39,15 +47,28 @@ function App() {
       <main className="max-w-6xl mx-auto py-8 px-4">
         <div className="flex flex-col lg:flex-row gap-8">
           <aside className="lg:w-80">
-            <Filters />
+            <Filters onRatingChange={setRating}/>
           </aside>
           
           <div className="flex-1">
             <div className="mt-6">
-              {SAMPLE_DATA.map((provider, index) => (
-                <ServiceCard key={index} {...provider} />
-              ))}
+            {serviceProviders.map((provider) => (
+              <ServiceCard
+                key={provider.handyPersonId}
+                name={`${provider.firstName} ${provider.lastName}`}
+                service="Handy Person"
+                rating={provider.averageRating}
+                reviews={0} // Assuming you don't have reviews count in your query
+                price={0} // Assuming you don't have price in your query
+                description={[`Contact: ${provider.contactNumber}`, `City: ${provider.city}, State: ${provider.state}`]}
+                image="https://via.placeholder.com/150" // Placeholder image
+              />
+            ))}
             </div>
+            {/* <div className="container mx-auto p-4">
+              <h1 className="text-2xl font-bold mb-4">Service Providers</h1>
+              <ServiceProviderList />
+            </div> */}
           </div>
         </div>
       </main>

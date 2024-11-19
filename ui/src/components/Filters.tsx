@@ -1,6 +1,19 @@
 import React from 'react';
 
-export default function Filters() {
+interface FiltersProps {
+  onRatingChange: (rating: number) => void;
+}
+
+const Filters: React.FC<FiltersProps> = ({ onRatingChange }) => {
+  const [selectedRating, setSelectedRating] = React.useState<number | null>(null);
+
+  const handleRatingChange = (rating: number) => {
+    setSelectedRating(rating);
+    onRatingChange(rating);
+    console.log(rating);
+    console.log("rating changed");
+  }
+  
   return (
     <div className="p-4 bg-white rounded-lg shadow">
       <div className="mb-6">
@@ -8,9 +21,11 @@ export default function Filters() {
           Customer Rating
           <span className="text-gray-400">▼</span>
         </h2>
-        {[4, 3, 2, 1].map((rating) => (
+        {[5, 4, 3, 2, 1].map((rating) => (
           <label key={rating} className="flex items-center mb-2">
-            <input type="radio" name="rating" className="mr-2" />
+            <input type="radio" name="rating" className="mr-2" 
+            checked={selectedRating === rating}
+            onChange = {() => handleRatingChange(rating)}/>
             <span className="flex-1">{'★'.repeat(rating)}{'☆'.repeat(5-rating)} & up</span>
             <span className="text-gray-500">{20 + rating * 5}</span>
           </label>
@@ -57,3 +72,5 @@ export default function Filters() {
     </div>
   );
 }
+
+export default Filters;
