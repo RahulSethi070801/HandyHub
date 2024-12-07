@@ -25,7 +25,7 @@ export default function HomePage() {
   const [serviceName, setServiceName] = useState<string | null>(null);
 
   useEffect(() => {
-    let url = 'http://localhost:8082/filterHandyPersons?';
+    let url = 'http://localhost:8080/filterHandyPersons?';
     if (rating !== null) {
       url += `minRating=${rating}&`;
     }
