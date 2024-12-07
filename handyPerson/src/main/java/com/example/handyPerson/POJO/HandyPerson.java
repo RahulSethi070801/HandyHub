@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class HandyPerson {
@@ -29,6 +31,8 @@ public class HandyPerson {
     private String State;
     @JsonProperty("Country")
     private String Country;
+    private Float Rate;
+    private String ServiceName;
     private Float AverageRating;
     private Float Price;
     private String Description;

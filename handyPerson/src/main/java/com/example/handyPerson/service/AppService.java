@@ -25,10 +25,17 @@ public class AppService {
         return appMapper.getHandyPersonsByRating(rating);
     }
 
+    public List<HandyPerson> filterHandyPerson(Integer minRating, Double maxPrice, String serviceName) {
+        return appMapper.filterHandyPerson(minRating, maxPrice, serviceName);
+    }
+
+
     public void deleteHandyPerson(Integer handyPersonId){ appMapper.deleteHandyPerson(handyPersonId); }
 
     public void createHandyPerson(HandyPerson handyPerson){ appMapper.createHandyPerson(handyPerson); }
 
     public void updateHandyPerson(Integer id, HandyPerson handyPerson){ appMapper.updateHandyPerson(id, handyPerson); }
+
+
 
 }

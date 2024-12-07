@@ -2,17 +2,33 @@ import React from 'react';
 
 interface FiltersProps {
   onRatingChange: (rating: number) => void;
+  onMaxPriceChange: (price: number) => void;
+  onServiceChange: (service: string) => void;
 }
 
-const Filters: React.FC<FiltersProps> = ({ onRatingChange }) => {
+const Filters: React.FC<FiltersProps> = ({ onRatingChange, onMaxPriceChange, onServiceChange }) => {
   const [selectedRating, setSelectedRating] = React.useState<number | null>(null);
+  const [selectedMaxPrice, setSelectedMaxPrice] = React.useState<number | null>(null);
+  const [selectedService, setSelectedService] = React.useState<string | null>(null);
 
   const handleRatingChange = (rating: number) => {
     setSelectedRating(rating);
     onRatingChange(rating);
-    console.log(rating);
-    console.log("rating changed");
   }
+  const handleMaxPriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const price = event.target.value ? parseFloat(event.target.value) : null;
+    setSelectedMaxPrice(price);
+
+    if (price !== null) {
+      onMaxPriceChange(price);
+    }
+  };
+
+  const handleServiceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const service = event.target.value;
+    setSelectedService((prev) => (prev === service ? null : service)); // Toggle selection
+    onServiceChange(service);
+  };
   
   return (
     <div className="p-4 bg-white rounded-lg shadow">
@@ -27,32 +43,29 @@ const Filters: React.FC<FiltersProps> = ({ onRatingChange }) => {
             checked={selectedRating === rating}
             onChange = {() => handleRatingChange(rating)}/>
             <span className="flex-1">{'★'.repeat(rating)}{'☆'.repeat(5-rating)} & up</span>
-            <span className="text-gray-500">{20 + rating * 5}</span>
+            {/* <span className="text-gray-500">{10 + rating * 5}</span> */}
           </label>
         ))}
       </div>
 
       <div className="mb-6">
         <h2 className="font-semibold mb-4 flex items-center justify-between">
-          Price
+          Max Price
           <span className="text-gray-400">▼</span>
         </h2>
         <input
-          type="range"
+          type="number"
           min="0"
-          max="160"
+          placeholder="Max"
           className="w-full"
+          value={selectedMaxPrice || ''}
+          onChange={handleMaxPriceChange}
         />
-        <div className="flex justify-between text-sm text-gray-600">
-          <span>$0</span>
-          <span>$80</span>
-          <span>$160+</span>
-        </div>
       </div>
 
       <div>
         <h2 className="font-semibold mb-4 flex items-center justify-between">
-          Service
+          Services
           <span className="text-gray-400">▼</span>
         </h2>
         {[
@@ -62,12 +75,17 @@ const Filters: React.FC<FiltersProps> = ({ onRatingChange }) => {
           { name: 'Security Guard', count: 3 }
         ].map((service) => (
           <label key={service.name} className="flex items-center mb-2">
-            <input type="checkbox" className="mr-2" />
+            <input
+              type="checkbox"
+              className="mr-2"
+              value={service.name}
+              checked={selectedService?.includes(service.name) || false}
+              onChange={(event) => handleServiceChange(event)}
+            />
             <span className="flex-1">{service.name}</span>
             <span className="text-gray-500">{service.count}</span>
           </label>
         ))}
-        <button className="text-sm text-indigo-600 mt-2">Show More</button>
       </div>
     </div>
   );
