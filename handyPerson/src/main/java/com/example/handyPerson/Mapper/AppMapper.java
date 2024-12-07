@@ -4,8 +4,8 @@ import com.example.handyPerson.POJO.HandyPerson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class AppMapper {
     @Autowired
     private final JdbcTemplate jdbcTemplate;
 
-    private AppMapper(JdbcTemplate jdbcTemplate) {
+    public AppMapper(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -36,6 +36,24 @@ public class AppMapper {
         );
     }
 
+
+    @Transactional
+    public void deleteHandyPerson(Integer handyPersonId){
+        String sql = "DELETE FROM HandyPerson WHERE HandyPersonId = '" + handyPersonId + "'";
+        jdbcTemplate.update(sql);
+    }
+
+    @Transactional
+    public void createHandyPerson(HandyPerson handyPerson){
+        String sql = String.format("INSERT INTO HandyPerson (FirstName, LastName, ContactNumber, EmailAddress, Address, City, State, Country, PostalCode) VALUES ('%s', '%s', '%s', '%s', '%s','%s', '%s', '%s', '%s')", handyPerson.getFirstName(), handyPerson.getLastName(), handyPerson.getContactNumber(), handyPerson.getEmailAddress(), handyPerson.getAddress(), handyPerson.getCity(), handyPerson.getState(), handyPerson.getCountry(), handyPerson.getPostalCode());
+        jdbcTemplate.update(sql);
+    }
+
+    @Transactional
+    public void updateHandyPerson(int HandyPersonId, HandyPerson handyPerson){
+        String sql = String.format("UPDATE HandyPerson SET FirstName = '%s', LastName = '%s', ContactNumber = '%s', EmailAddress = '%s', Address = '%s', City = '%s', State = '%s', Country = '%s', PostalCode = '%s' WHERE HandyPersonId = %d", handyPerson.getFirstName(), handyPerson.getLastName(), handyPerson.getContactNumber(), handyPerson.getEmailAddress(), handyPerson.getAddress(), handyPerson.getCity(), handyPerson.getState(), handyPerson.getCountry(), handyPerson.getPostalCode(), handyPerson.getHandyPersonId());
+        jdbcTemplate.update(sql);
+    }
 
 
 }
