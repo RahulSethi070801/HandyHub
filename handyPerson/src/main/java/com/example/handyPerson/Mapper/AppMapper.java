@@ -4,6 +4,8 @@ import com.example.handyPerson.POJO.HandyPerson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,9 +16,11 @@ public class AppMapper {
 
     @Autowired
     private final JdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public AppMapper(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
     }
 
     public List<HandyPerson> getAllHandyPersons(){
@@ -34,6 +38,16 @@ public class AppMapper {
                 "on H.HandyPersonId = X.HandyPersonId",
                 new Object[]{rating}, new BeanPropertyRowMapper<>(HandyPerson.class)
         );
+    }
+
+    public List<HandyPerson> filterHandyPerson(Integer minRating, Double maxPrice, String serviceName) {
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("minRating", minRating)
+                .addValue("maxPrice", maxPrice)
+                .addValue("serviceName", serviceName);;
+
+        return namedParameterJdbcTemplate.query("CALL FilterHandyPersons(:minRating, :maxPrice, :serviceName)",
+                params, new BeanPropertyRowMapper<>(HandyPerson.class));
     }
 
 

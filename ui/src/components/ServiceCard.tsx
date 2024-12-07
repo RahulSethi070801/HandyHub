@@ -8,6 +8,7 @@ interface ServiceCardProps {
   reviews: number;
   price: number;
   description: string[];
+  contactNumber: string;
   image: string;
 }
 
@@ -18,7 +19,8 @@ export default function ServiceCard({
   reviews,
   price,
   description,
-  image
+  image,
+  contactNumber
 }: ServiceCardProps) {
   return (
     <div className="flex flex-col sm:flex-row gap-4 bg-white p-4 rounded-lg shadow mb-4">
@@ -50,10 +52,10 @@ export default function ServiceCard({
 
         <div className="flex justify-between items-center">
           <button className="text-blue-600 hover:underline">View details</button>
-          <button className="bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+            <button className="bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2">
             <Phone size={16} />
-            XXX-XXX-XXXX
-          </button>
+            {contactNumber}
+            </button>
         </div>
       </div>
     </div>
