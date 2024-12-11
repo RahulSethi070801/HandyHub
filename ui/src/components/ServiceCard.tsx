@@ -39,9 +39,18 @@ export default function ServiceCard({
         </div>
         
         <div className="flex items-center gap-2 mb-2">
-          <Star className="text-yellow-400 fill-current" size={16} />
-          <span className="font-medium">{rating}</span>
-          <span className="text-gray-500">({reviews}k reviews)</span>
+          {rating > 0 && (
+            <>
+              <Star className="text-yellow-400 fill-current" size={16} />
+              <span className="font-medium">{rating}</span>
+            </>
+          )}
+          {rating == null && (
+                      <>
+                        <p className="font-medium">No reviews</p>
+                      </>
+                    )}
+
         </div>
 
         <ul className="mb-4">
@@ -51,7 +60,6 @@ export default function ServiceCard({
         </ul>
 
         <div className="flex justify-between items-center">
-          <button className="text-blue-600 hover:underline">View details</button>
             <button className="bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2">
             <Phone size={16} />
             {contactNumber}

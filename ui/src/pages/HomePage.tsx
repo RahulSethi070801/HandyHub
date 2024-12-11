@@ -14,13 +14,16 @@ interface ServiceProvider {
   rate: number;
   serviceName: string;
   averageRating: number;
+  serviceDescription: string;
 }
 
 
 export default function HomePage() {
 
   const [serviceProviders, setServiceProviders] = useState<ServiceProvider[]>([]);
+//   const [filteredProviders, setFilteredProviders] = useState<ServiceProvider[]>([]);
   const [rating, setRating] = useState<number | null>(null);
+  const [keyword, setKeyword] = useState<string>('');  // State to store the keyword
   const [maxPrice, setMaxPrice] = useState<number | null>(null);
   const [serviceName, setServiceName] = useState<string | null>(null);
 
@@ -54,6 +57,37 @@ export default function HomePage() {
       .catch(error => console.error('Error fetching service providers:', error));
   }, [rating, maxPrice, serviceName]);
 
+  // Function to fetch service providers from the backend
+    const fetchServiceProviders = async (keyword: string = '') => {
+      let url = `http://localhost:8080/searchHandyPersons?keyword=${keyword}`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        console.log('Fetched data:', data);
+        setServiceProviders(data);
+//         setFilteredProviders(data);  // Initially, show all fetched data
+      } catch (error) {
+        console.error('Error fetching service providers:', error);
+      }
+    };
+
+    // Fetch providers when component mounts or rating/keyword changes
+      useEffect(() => {
+        fetchServiceProviders(keyword);
+      }, [keyword]);
+
+      // Handle search input change
+      const handleSearch = (searchKeyword: string) => {
+        setKeyword(searchKeyword);
+        fetchServiceProviders(searchKeyword);  // Fetch results based on the new keyword
+      };
+
+
+
   return (
     <div className="min-h-screen bg-gray-100">
       <Header />
@@ -65,6 +99,9 @@ export default function HomePage() {
           </aside>
 
           <div className="flex-1">
+            {/* Pass handleSearch to SearchFilters */}
+            <SearchFilters onSearch={handleSearch} />
+
             <div className="mt-6">
             {serviceProviders.map((provider) => (
               <ServiceCard
@@ -74,7 +111,7 @@ export default function HomePage() {
                 rating={provider.averageRating}
                 reviews={1} // Assuming you don't have reviews count in your query
                 price={provider.rate}
-                description={[ `City: ${provider.city}, State: ${provider.state}`]}
+                description={[`City: ${provider.city}, State: ${provider.state}, Description: ${provider.ServiceDescription}`]}
                 contactNumber={provider.contactNumber}
                 image="https://via.placeholder.com/150" // Placeholder image
               />

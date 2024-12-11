@@ -1,7 +1,26 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Search, MapPin } from 'lucide-react';
 
-export default function SearchFilters() {
+interface SearchFiltersProps {
+    onSearch: (keyword: string) => void; // Pass the search keyword to the parent component
+}
+
+// Modified parameters Prathyush
+export default function SearchFilters({ onSearch }: SearchFiltersProps) {
+    //Newly added Prathyush
+    const [keyword, setKeyword] = useState('');
+
+    // Newly added
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setKeyword(e.target.value);
+      };
+    const handleSearchClick = () => {
+      if (keyword.trim() !== '') {
+        onSearch(keyword); // Trigger the search when the user clicks the search button
+      }
+    };
+
+  //Added new div at the end for keyword
   return (
     <div className="flex flex-col sm:flex-row gap-4">
       <div className="flex-1 relative">
@@ -10,6 +29,9 @@ export default function SearchFilters() {
           type="text"
           placeholder="Optimized Search Here"
           className="w-full pl-10 pr-4 py-2 rounded-lg border shadow-sm"
+          // Newly added
+          value={keyword}
+          onChange={handleInputChange}
         />
       </div>
       <div className="relative">
@@ -19,6 +41,14 @@ export default function SearchFilters() {
           <option>Chicago, Illinois</option>
           <option>Springfield, Illinois</option>
         </select>
+      </div>
+      <div className="flex justify-center sm:justify-start mt-4 sm:mt-0">
+              <button
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-sm hover:bg-blue-600"
+                onClick={handleSearchClick}
+              >
+                Search
+              </button>
       </div>
     </div>
   );

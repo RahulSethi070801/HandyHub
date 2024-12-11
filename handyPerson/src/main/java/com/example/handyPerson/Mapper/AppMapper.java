@@ -50,6 +50,34 @@ public class AppMapper {
                 params, new BeanPropertyRowMapper<>(HandyPerson.class));
     }
 
+//    public List<HandyPerson> searchHandyPersons(String keyword) {
+//        String sql = "SELECT H.HandyPersonId, H.FirstName, H.LastName, H.ContactNumber, H.City, H.State, " +
+//                "X.AverageRating " +
+//                "FROM HandyPerson H " +
+//                "INNER JOIN (SELECT HandyPersonId, AVG(Rating) AS AverageRating FROM Reviews GROUP BY HandyPersonId) X " +
+//                "ON H.HandyPersonId = X.HandyPersonId " +
+//                "WHERE H.City LIKE ? OR H.State LIKE ?";
+//        String searchTerm = "%" + keyword + "%"; // To match keyword anywhere in the string
+////        return jdbcTemplate.query(sql, new Object[]{searchTerm, searchTerm, searchTerm},
+////                new BeanPropertyRowMapper<>(HandyPerson.class));
+//        return jdbcTemplate.query(sql, new Object[]{searchTerm, searchTerm},
+//                new BeanPropertyRowMapper<>(HandyPerson.class));
+//    }
+
+    public List<HandyPerson> searchHandyPersons(String keyword) {
+        // The SQL query to call the stored procedure
+        String sql = "CALL search_handy_persons(?)";
+
+        // Execute the stored procedure and map the result to HandyPerson objects
+        return jdbcTemplate.query(
+                sql,
+                new Object[]{keyword}, // Pass the keyword as the parameter for the stored procedure
+                new BeanPropertyRowMapper<>(HandyPerson.class) // Map the result set to HandyPerson objects
+        );
+
+    }
+
+
 
     @Transactional
     public void deleteHandyPerson(Integer handyPersonId){

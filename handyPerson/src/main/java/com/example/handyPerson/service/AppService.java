@@ -3,6 +3,7 @@ package com.example.handyPerson.service;
 import com.example.handyPerson.Mapper.AppMapper;
 import com.example.handyPerson.POJO.HandyPerson;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class AppService {
         return appMapper.getHandyPersonsByRating(rating);
     }
 
+
     public List<HandyPerson> filterHandyPerson(Integer minRating, Double maxPrice, String serviceName) {
         return appMapper.filterHandyPerson(minRating, maxPrice, serviceName);
     }
@@ -35,6 +37,15 @@ public class AppService {
     public void createHandyPerson(HandyPerson handyPerson){ appMapper.createHandyPerson(handyPerson); }
 
     public void updateHandyPerson(Integer id, HandyPerson handyPerson){ appMapper.updateHandyPerson(id, handyPerson); }
+
+
+
+
+    // KEYWORD SEARCH
+    public List<HandyPerson> searchHandyPersons(String keyword) {
+        return appMapper.searchHandyPersons(keyword);
+//        return appMapper.searchHandyPersons("John");
+    }
 
 
 

@@ -33,9 +33,11 @@ public class HandyPerson {
     private String Country;
     private Float Rate;
     private String ServiceName;
+
     private Float AverageRating;
-    private Float Price;
-    private String Description;
+//    private Float Price;
+    @JsonProperty("ServiceDescription")
+    private String ServiceDescription;
 
     @JsonProperty("PostalCode")
     private String PostalCode;
@@ -130,21 +132,21 @@ public class HandyPerson {
         AverageRating = averageRating;
     }
 
-    public Float getPrice() {
-        return Price;
-    }
+//    public Float getPrice() {
+//        return Price;
+//    }
+//
+//    public void setPrice(Float price) {
+//        Price = price;
+//    }
 
-    public void setPrice(Float price) {
-        Price = price;
-    }
-
-    public String getDescription() {
-        return Description;
-    }
-
-    public void setDescription(String description) {
-        Description = description;
-    }
+//    public String getDescription() {
+//        return Description;
+//    }
+//
+//    public void setDescription(String description) {
+//        Description = description;
+//    }
 
 
 }
