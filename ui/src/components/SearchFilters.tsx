@@ -27,20 +27,12 @@ export default function SearchFilters({ onSearch }: SearchFiltersProps) {
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
         <input
           type="text"
-          placeholder="Optimized Search Here"
+          placeholder="Search Here"
           className="w-full pl-10 pr-4 py-2 rounded-lg border shadow-sm"
           // Newly added
           value={keyword}
           onChange={handleInputChange}
         />
-      </div>
-      <div className="relative">
-        <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-        <select className="pl-10 pr-8 py-2 rounded-lg appearance-none bg-white border shadow-sm">
-          <option>Champaign, Illinois</option>
-          <option>Chicago, Illinois</option>
-          <option>Springfield, Illinois</option>
-        </select>
       </div>
       <div className="flex justify-center sm:justify-start mt-4 sm:mt-0">
               <button

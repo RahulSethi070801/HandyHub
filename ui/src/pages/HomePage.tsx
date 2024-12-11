@@ -83,6 +83,9 @@ export default function HomePage() {
       // Handle search input change
       const handleSearch = (searchKeyword: string) => {
         setKeyword(searchKeyword);
+        setRating(null);
+        setMaxPrice(null);
+        setServiceName(null);
         fetchServiceProviders(searchKeyword);  // Fetch results based on the new keyword
       };
 
@@ -95,7 +98,9 @@ export default function HomePage() {
       <main className="max-w-6xl mx-auto py-8 px-4">
         <div className="flex flex-col lg:flex-row gap-8">
           <aside className="lg:w-80">
-            <Filters onRatingChange={setRating} onMaxPriceChange={setMaxPrice} onServiceChange={setServiceName}/>
+            <Filters rating={rating} maxPrice={maxPrice} serviceName={serviceName}
+             onRatingChange={setRating} onMaxPriceChange={setMaxPrice} onServiceChange={setServiceName}
+            resetFilters={keyword !== ''}/>
           </aside>
 
           <div className="flex-1">
@@ -111,7 +116,11 @@ export default function HomePage() {
                 rating={provider.averageRating}
                 reviews={1} // Assuming you don't have reviews count in your query
                 price={provider.rate}
-                description={[`City: ${provider.city}, State: ${provider.state}, Description: ${provider.ServiceDescription}`]}
+                description={[
+                    `Description: ${provider.ServiceDescription}`,
+                    `City: ${provider.city}, State: ${provider.state}`
+                ]}
+//                 description={[`City: ${provider.city} State: ${provider.state} Description: ${provider.ServiceDescription}`]}
                 contactNumber={provider.contactNumber}
                 image="https://via.placeholder.com/150" // Placeholder image
               />

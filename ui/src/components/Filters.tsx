@@ -1,15 +1,45 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import axios from 'axios';
 
 interface FiltersProps {
+    rating: number | null;
+    maxPrice: number | null;
+    serviceName: string | null;
   onRatingChange: (rating: number) => void;
   onMaxPriceChange: (price: number) => void;
   onServiceChange: (service: string) => void;
+  resetFilters: boolean;
 }
 
-const Filters: React.FC<FiltersProps> = ({ onRatingChange, onMaxPriceChange, onServiceChange }) => {
+interface Service{
+    serviceId: number;
+    serviceName: string;
+    serviceDescription: string;}
+
+const Filters: React.FC<FiltersProps> = ({ rating, maxPrice, serviceName, onRatingChange, onMaxPriceChange, onServiceChange, resetFilters }) => {
   const [selectedRating, setSelectedRating] = React.useState<number | null>(null);
   const [selectedMaxPrice, setSelectedMaxPrice] = React.useState<number | null>(null);
   const [selectedService, setSelectedService] = React.useState<string | null>(null);
+  const [services, setServices] = React.useState<Service[]>([]);
+
+  React.useEffect(() => {
+      const fetchServices = async () => {
+          try {
+              const response = await axios.get('http://localhost:8080/getAllServices');
+              setServices(response.data);
+          } catch (error) {
+              console.error('Error fetching services:', error);}};
+              fetchServices();
+  },
+  []);
+
+  useEffect(() => {
+    if (resetFilters) {
+      setSelectedRating(null);
+      setSelectedMaxPrice(null);
+      setSelectedService(null);
+    }
+  }, [resetFilters]);
 
   const handleRatingChange = (rating: number) => {
     setSelectedRating(rating);
@@ -56,8 +86,9 @@ const Filters: React.FC<FiltersProps> = ({ onRatingChange, onMaxPriceChange, onS
         <input
           type="number"
           min="0"
-          placeholder="Max"
+          placeholder="Max Price"
           className="w-full"
+          selected={selectedMaxPrice}
           value={selectedMaxPrice || ''}
           onChange={handleMaxPriceChange}
         />
@@ -68,27 +99,24 @@ const Filters: React.FC<FiltersProps> = ({ onRatingChange, onMaxPriceChange, onS
           Services
           <span className="text-gray-400">▼</span>
         </h2>
-        {[
-          { name: 'Plumbing', count: 9 },
-          { name: 'Electrician', count: 4 },
-          { name: 'Mechanic', count: 5 },
-          { name: 'Security Guard', count: 3 }
-        ].map((service) => (
-          <label key={service.name} className="flex items-center mb-2">
-            <input
-              type="checkbox"
-              className="mr-2"
-              value={service.name}
-              checked={selectedService?.includes(service.name) || false}
-              onChange={(event) => handleServiceChange(event)}
-            />
-            <span className="flex-1">{service.name}</span>
-            <span className="text-gray-500">{service.count}</span>
-          </label>
-        ))}
+        {services.length >0 ? (
+            services.map((service) => (
+                <label key={service.serviceId} className="flex items-center mb-2">
+                <input
+                type="radio"
+                className="mr-2"
+                name="service"
+                value={service.serviceName}
+                checked={selectedService === service.serviceName}
+                onChange={handleServiceChange}
+                />
+                <span className="flex-1">{service.serviceName}</span>
+                </label>))
+                ) : (<p>Loading services...</p>)}
+
       </div>
     </div>
   );
-}
+};
 
 export default Filters;

@@ -1,6 +1,7 @@
 package com.example.handyPerson.controller;
 
 import com.example.handyPerson.POJO.HandyPerson;
+import com.example.handyPerson.POJO.Services;
 import com.example.handyPerson.service.AppService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -66,6 +67,11 @@ public class AppController {
     public List<HandyPerson> searchHandyPersons(@RequestParam String keyword) {
         return appService.searchHandyPersons(keyword);
 //        return appService.searchHandyPersons("John");
+    }
+
+    @GetMapping("/getAllServices")
+    public List<Services> getAllServices() {
+        return appService.getAllServices();
     }
 
 }

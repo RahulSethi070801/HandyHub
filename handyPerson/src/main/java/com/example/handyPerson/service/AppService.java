@@ -2,6 +2,7 @@ package com.example.handyPerson.service;
 
 import com.example.handyPerson.Mapper.AppMapper;
 import com.example.handyPerson.POJO.HandyPerson;
+import com.example.handyPerson.POJO.Services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,10 @@ public class AppService {
     public List<HandyPerson> searchHandyPersons(String keyword) {
         return appMapper.searchHandyPersons(keyword);
 //        return appMapper.searchHandyPersons("John");
+    }
+
+    public List<Services> getAllServices() {
+        return appMapper.getAllServices();
     }
 
 

@@ -1,6 +1,7 @@
 package com.example.handyPerson.Mapper;
 
 import com.example.handyPerson.POJO.HandyPerson;
+import com.example.handyPerson.POJO.Services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -48,6 +49,10 @@ public class AppMapper {
 
         return namedParameterJdbcTemplate.query("CALL FilterHandyPersons(:minRating, :maxPrice, :serviceName)",
                 params, new BeanPropertyRowMapper<>(HandyPerson.class));
+    }
+
+    public List<Services> getAllServices() {
+        return jdbcTemplate.query("SELECT ServiceName FROM Services", new BeanPropertyRowMapper<>(Services.class));
     }
 
 //    public List<HandyPerson> searchHandyPersons(String keyword) {
