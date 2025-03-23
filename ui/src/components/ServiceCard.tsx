@@ -62,7 +62,7 @@ export default function ServiceCard({
         <div className="flex justify-between items-center">
             <button className="bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2">
             <Phone size={16} />
-            {contactNumber}
+                <a href="tel:{contactNumber}">{contactNumber}</a>
             </button>
         </div>
       </div>
